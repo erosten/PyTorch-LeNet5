@@ -13,10 +13,21 @@ First, clone the repo
 git clone https://github.com/erosten/PyTorch-LeNet5.git
 ```
 
+Change into the cloned repo directory
+```
+cd PyTorch-LeNet5/
+```
+
 Install the requirements (I strongly recommend a virtual environment)
 
 ```
 pip3 install -r requirements.txt
+```
+
+Install the modules in the repo
+
+```
+pip install .
 ```
 
 Start the training
