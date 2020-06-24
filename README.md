@@ -2,7 +2,7 @@
 
 This repo implements a modified version of LeNet-5 in PyTorch as introduced in ["Gradient-Based Learning Applied to Document Recognition" by LeCun et al., 1998a](http://vision.stanford.edu/cs598_spring07/papers/Lecun98.pdf). Reports contains some of my own notes while reading the paper, the differences between this implementation and the original, and results on both the [MNIST dataset](http://yann.lecun.com/exdb/mnist/), and my own handwritten digits.
 
-![alt text](https://github.com/erosten/PyTorch-LeNet5/tree/master/my_results.png?raw=true)
+![](https://github.com/erosten/PyTorch-LeNet5/blob/master/reports/images/my_results.png?raw=true)
 
 ## Running the code
 
