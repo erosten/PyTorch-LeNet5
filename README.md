@@ -47,7 +47,7 @@ The general file tree is shown below with some omissions for clarity.
 │   ├── MNIST
 │   ├── my_data
 ├── models
-│   └── Experiment_6
+│   └── Experiment_4
 │       ├── config.pkl
 │       ├── loss.pkl
 │       ├── model.pth
@@ -91,7 +91,7 @@ This directory contains 4 files
 `test_model.py` requires an experiment to load the model from. To use the provided trained model from experiment 6, one can run
 
 ```
-python test_model.py -en 6
+python test_model.py -en 4
 ```
 
 ### ./src/utils
@@ -124,5 +124,5 @@ This directory contains 3 files
 `visualize_experiment.py` loads an experiment into an ExperimentManager object, and provides accuracy and loss plots, as well as the best training and testing accuracies achieved during a training experiment. As with the `test_model.py` file, an experiment is required to use this file.
 
 ```
-python visualize_experiment.py -en 6
+python visualize_experiment.py -en 4
 ```
