@@ -77,7 +77,7 @@ if __name__ == '__main__':
     optimizer = optimizer_func(model.parameters(), **optimizer_args)
 
     ### Train!
-    EM = ExperimentManager(experiment_root_dir)
+    EM = ExperimentManager(experiments_root_dir)
     loss = []
     training_accuracy = []
     testing_accuracy = []
