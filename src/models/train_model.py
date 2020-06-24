@@ -7,7 +7,6 @@ from model import LeNet5
 import sys
 import pickle
 
-sys.path.append('..')
 from utils.experiment_manager import ExperimentManager
 
 

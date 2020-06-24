@@ -11,7 +11,6 @@ from model import LeNet5
 import config
 
 import sys
-sys.path.append('..')
 from utils.experiment_manager import ExperimentManager
 
 torch.manual_seed(42)
