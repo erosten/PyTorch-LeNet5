@@ -2,12 +2,12 @@ import pickle
 import sys
 import matplotlib.pyplot as plt
 import argparse
-sys.path.append('..')
 from utils.experiment_manager import ExperimentManager
+from definitions import EXPERIMENTS_ROOT_DIR
 
-def main(experiment_num, experiments_root_dir):
+def main(experiment_num):
     EM = ExperimentManager()
-    EM.load(experiments_root_dir, experiment_num)
+    EM.load(EXPERIMENTS_ROOT_DIR, experiment_num)
 
     epochs = list(range(len(EM.loss)))
     epochs = [epoch + 1 for epoch in epochs]
@@ -48,14 +48,9 @@ def main(experiment_num, experiments_root_dir):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-en','--experiment_num', help='Experiment Number you\'d like to visualize', required=True)
-    parser.add_argument('--root_dir', help='Root Directory of Experiments in form root_dir\\Experiment_{en}')
     args = parser.parse_args()
-    if args.root_dir is None:
-        experiments_root_dir = '../../models'
-    else:
-        experiments_root_dir = args.root_dir
 
     experiment_num = args.experiment_num
 
-    print(f'Visualizing Experiment {experiment_num} in {experiments_root_dir}')
-    main(experiment_num, experiments_root_dir)
+    print(f'Visualizing Experiment {experiment_num} in {EXPERIMENTS_ROOT_DIR}')
+    main(experiment_num)

@@ -1,6 +1,7 @@
 import torch
 import torchvision
 import torchvision.transforms as transforms
+from definitions import DATA_DIR
 
 # gpu if exists, cpu else
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -33,8 +34,7 @@ optimizer_func = torch.optim.Adam
 learning_rate = 0.001
 optimizer_args = {'lr': learning_rate}
 
-# root directory of experiment results
-experiments_root_dir = '../../models/'
+
 
 
 
@@ -48,11 +48,11 @@ if dataset == 'MNIST':
         ])
 
 
-    training_set = torchvision.datasets.MNIST('../../data', train=True, download=True, transform=transform)
+    training_set = torchvision.datasets.MNIST(DATA_DIR, train=True, download=True, transform=transform)
     train_loader = torch.utils.data.DataLoader(training_set,
                     batch_size=batch_size_train, shuffle=True, num_workers=8)
 
-    test_set = torchvision.datasets.MNIST('../../data', train=False, download=True, transform=transform)
+    test_set = torchvision.datasets.MNIST(DATA_DIR, train=False, download=True, transform=transform)
     test_loader = torch.utils.data.DataLoader(test_set,
                     batch_size=batch_size_test, shuffle=False, num_workers=8)
 

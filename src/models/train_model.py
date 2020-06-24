@@ -8,7 +8,7 @@ import sys
 import pickle
 
 from utils.experiment_manager import ExperimentManager
-
+from definitions import EXPERIMENTS_ROOT_DIR
 
 torch.manual_seed(42)
 
@@ -25,7 +25,6 @@ try:
 
     device = config.device
     num_epochs = config.num_epochs
-    experiments_root_dir = config.experiments_root_dir
     ignored_config_vals = config.ignored_config_vals
 
 except Exception:
@@ -76,7 +75,7 @@ if __name__ == '__main__':
     optimizer = optimizer_func(model.parameters(), **optimizer_args)
 
     ### Train!
-    EM = ExperimentManager(experiments_root_dir)
+    EM = ExperimentManager(EXPERIMENTS_ROOT_DIR)
     loss = []
     training_accuracy = []
     testing_accuracy = []

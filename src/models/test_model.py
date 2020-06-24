@@ -6,12 +6,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 import PIL.ImageOps
+import sys
+import os
 
 from model import LeNet5
 import config
 
-import sys
+
 from utils.experiment_manager import ExperimentManager
+from definitions import EXPERIMENTS_ROOT_DIR, DATA_DIR
 
 torch.manual_seed(42)
 
@@ -22,7 +25,6 @@ try:
     transform = config.transform
 
     device = config.device
-    experiments_root_dir = config.experiments_root_dir
 
 except Exception:
     print('config.py file not found.')
@@ -51,7 +53,7 @@ if __name__ == '__main__':
     experiment_num = args.experiment_num
 
     EM = ExperimentManager()
-    EM.load(experiments_root_dir, experiment_num)
+    EM.load(EXPERIMENTS_ROOT_DIR, experiment_num)
 
     model = EM.model.to(device)
     # test accuracy on MNIST test set
@@ -90,7 +92,6 @@ if __name__ == '__main__':
 
     rotation_transform = rotationTransform(-90)
     coeff = 1 # for my_data
-    coeff = 0 # for my_data2
     normalize_transform = normalizeTransform(coeff)
     invert_transform = invertTransform()
 
@@ -105,7 +106,7 @@ if __name__ == '__main__':
          transforms.ToTensor()
         ])
 
-    custom_data_image_folder = '../../data/my_data2'
+    custom_data_image_folder = os.path.join(DATA_DIR, 'my_data')
 
     data = torchvision.datasets.ImageFolder(root=custom_data_image_folder, transform=transform)
     data_loader = torch.utils.data.DataLoader(data, batch_size=10, shuffle=False)
