@@ -9,9 +9,13 @@ from models.model import LeNet5
 
 class ExperimentManager():
     def __init__(self, root_dir=None):
+        # Directory where root_dir/Experiment_{i}
         self.root_dir = root_dir
+        # If we are loading, do not pass root_dir
         if root_dir is not None:
-            self.experiment_dir = self.get_next_experiment_folder()
+            self.experiment_dir = self._get_next_experiment_folder()
+
+        # experiment variables of interest
         self.loss = None
         self.train_acc = None
         self.val_acc = None
@@ -20,7 +24,7 @@ class ExperimentManager():
         self.model = None
 
 
-    def get_next_experiment_folder(self):
+    def _get_next_experiment_folder(self):
         i = 1
         while os.path.isdir(os.path.join(self.root_dir,f'Experiment_{i}')):
             i += 1
@@ -29,10 +33,19 @@ class ExperimentManager():
         os.mkdir(experiment_path)
         return experiment_path
 
+    # save a pytorch model
     def save_model(self, model):
         model_save_path = os.path.join(self.experiment_dir, 'model.pth')
         torch.save(model.state_dict(), model_save_path)
 
+    ## stat assumed as list with len(stat) = num_epochs
+    def save_stat(self, stat, stat_filename):
+        stat_path = os.path.join(self.experiment_dir, stat_filename)
+        with open(stat_path, 'wb') as f:
+            pickle.dump(stat, f)
+
+
+    # save training stats: loss, train_acc, val_acc, test_acc
     def save_stats(self, loss=None, train_acc=None, val_acc=None, test_acc=None):
         self.loss = loss
         self.train_acc = train_acc
@@ -40,25 +53,23 @@ class ExperimentManager():
         self.test_acc = test_acc
 
         if loss is not None:
-            loss_path = os.path.join(self.experiment_dir, 'loss.pkl')
-            with open(loss_path, 'wb') as f:
-                pickle.dump(loss, f)
+            self.save_stat(loss, 'loss.pkl')
 
         if train_acc is not None:
-            train_acc_path = os.path.join(self.experiment_dir, 'training_accuracies.pkl')
-            with open(train_acc_path, 'wb') as f:
-                pickle.dump(train_acc, f)
+            self.save_stat(train_acc, 'training_accuracies.pkl')
 
         if val_acc is not None:
-            val_acc_path = os.path.join(self.experiment_dir, 'validation_accuracies.pkl')
-            with open(val_acc_path, 'wb') as f:
-                pickle.dump(val_acc, f)
+            self.save_stat(val_acc, 'validation_accuracies.pkl')
 
         if test_acc is not None:
-            test_acc_path = os.path.join(self.experiment_dir, 'testing_accuracies.pkl')
-            with open(test_acc_path, 'wb') as f:
-                pickle.dump(test_acc, f)
+            self.save_stat(test_acc, 'testing_accuracies.pkl')
 
+
+    # save config file
+    # saves all variables that are:
+    # 1. not modules
+    # 2. not in the passed ignored_vals list
+    # 3. not the ignored_vals_list itself
     def save_config(self, config, ignored_vals):
         hyperparameters = [item for item in dir(config) if not item.startswith('__')]
         config_dict = {}
@@ -74,8 +85,19 @@ class ExperimentManager():
         with open(config_path, 'wb') as f:
             pickle.dump(config_dict, f)
 
+    # attempts to load a state by given filename
+    # if it does not exist, return an empty list
+    def load_stat(self, stat_filename):
+        stat_path = os.path.join(self.experiment_dir, stat_filename)
+        if os.path.exists(stat_path):
+            with open(stat_path,'rb') as f:
+                return pickle.load(f)
+        else:
+            return []
 
+    # loads an experiment given the experiment number and root experiment dir
     def load(self, root_dir, experiment_num):
+        # set experiment dir and check if it exists
         self.experiment_dir = os.path.join(root_dir, f'Experiment_{experiment_num}')
         exists = os.path.exists(self.experiment_dir)
 
@@ -83,19 +105,13 @@ class ExperimentManager():
             print(f'Experiment directory path {self.experiment_dir} did not exist.')
             sys.exit()
 
+        # load stats
+        self.loss = self.load_stat('loss.pkl')
+        self.train_acc = self.load_stat('training_accuracies.pkl')
+        self.val_acc = self.load_stat('validation_accuracies.pkl')
+        self.test_acc = self.load_stat('testing_accuracies.pkl')
+        self.config_dict = self.load_stat('config.pkl')
 
-        with open(os.path.join(self.experiment_dir, 'loss.pkl'), 'rb') as f:
-            self.loss = pickle.load(f)
-        with open(os.path.join(self.experiment_dir, 'training_accuracies.pkl'), 'rb') as f:
-            self.train_acc = pickle.load(f)
-        val_path = os.path.join(self.experiment_dir, 'validation_accuracies.pkl')
-        if os.path.exists(val_path):
-            with open(val_path, 'rb') as f:
-                self.val_acc = pickle.load(f)
-        with open(os.path.join(self.experiment_dir, 'testing_accuracies.pkl'), 'rb') as f:
-            self.test_acc = pickle.load(f)
-        with open(os.path.join(self.experiment_dir, 'config.pkl'), 'rb') as f:
-            self.config_dict = pickle.load(f)
-
+        # load model
         self.model = LeNet5(self.config_dict['num_classes'])
         self.model.load_state_dict(torch.load(os.path.join(self.experiment_dir, 'model.pth')))

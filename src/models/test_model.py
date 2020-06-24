@@ -30,6 +30,7 @@ except Exception:
     print('config.py file not found.')
     sys.exit()
 
+# similar to train_model.evaluate
 def test_accuracy(model, data_set, data_loader):
     num_correct = 0
     num_total = 0
@@ -45,23 +46,26 @@ def test_accuracy(model, data_set, data_loader):
     print(f'Test Accuracy: {test_accuracy}')
     return test_accuracy, predicted_classes, labels
 
+## Uses Experiment Manager to load model
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-en','--experiment_num', help='Experiment Number you\'d like to visualize', required=True)
+    parser.add_argument('-en','--experiment_num', help='Experiment Number you\'d like to test', required=True)
     args = parser.parse_args()
 
     experiment_num = args.experiment_num
 
     EM = ExperimentManager()
     EM.load(EXPERIMENTS_ROOT_DIR, experiment_num)
-
+    # device specified in config
     model = EM.model.to(device)
     # test accuracy on MNIST test set
     test_accuracy(model, data_set=data_sets_dict['test'][0], data_loader=data_sets_dict['test'][1])
 
 
     # test on your own images
-    # play with this as needed
+    # play with code below as needed
+
+    # define a rotation transform since my images are strangely flipped
     class rotationTransform:
         def __init__(self, angle):
             self.angle = angle
@@ -69,63 +73,56 @@ if __name__ == '__main__':
         def __call__(self,x):
             return torchvision.transforms.functional.rotate(x,self.angle)
 
-    class normalizeTransform:
+    # apply thresholding to create
+    # 1. Black background: values larger than mean_val - coeff*std_val set to 0
+    # 2. White background: all other values set to 1
+    class thresholdTransform:
         def __init__(self, coeff):
             self.coeff = coeff
         def __call__(self,x):
-
+            # convert PIL Image to array
             arr = np.array(x)
             arr[arr>(np.mean(arr) - self.coeff*np.std(arr))] = 0
             arr[arr > 255] = 255
-            x = Image.fromarray(arr)
-            # bbox = x.getbbox()
-            # print(bbox)
-            # cropped = x.crop(bbox)
-            # x.show()
+            # convert back to PIL Image
+            x = Image.fromarray(np.uint8(arr), 'L')
             return x
 
-    class invertTransform:
-        def __init__(self):
-            pass
-        def __call__(self,x):
-            return PIL.ImageOps.invert(x)
 
-    rotation_transform = rotationTransform(-90)
-    coeff = 1 # for my_data
-    normalize_transform = normalizeTransform(coeff)
-    invert_transform = invertTransform()
-
+    # Compose transforms.
+    # 1. CenterCrop as images are massive - 4032,3024
+    # 2. Convert to Grayscale
+    # 3. Resize to 32x32 with interpolation LANCZOS
+    # 3a. interpolation number to PIL interpolation: https://pytorch.org/docs/stable/_modules/torchvision/transforms/transforms.html#Resize
+    # 3b. LANCZOS best interpolation for downscaling: https://pillow.readthedocs.io/en/stable/handbook/concepts.html#concept-filters
+    # 4. Rotate the Image
+    # 5. Threshold the Image
+    # 6. Convert to tensor (which normalizes to [0,1])
     transform = transforms.Compose(
         [transforms.CenterCrop(1500),
          transforms.Grayscale(),
-         # normalize_transform,
-         transforms.Resize(32,interpolation=3),
-         rotation_transform,
-         normalize_transform,
-         # invert_transform,
+         transforms.Resize(32,interpolation=Image.LANCZOS),
+         rotationTransform(-90),
+         thresholdTransform(coeff=1),
          transforms.ToTensor()
         ])
 
+    # Load the custom dataset
     custom_data_image_folder = os.path.join(DATA_DIR, 'my_data')
 
     data = torchvision.datasets.ImageFolder(root=custom_data_image_folder, transform=transform)
     data_loader = torch.utils.data.DataLoader(data, batch_size=10, shuffle=False)
 
 
+    # get the images, and reshape them to 28x28
     dataiter = iter(data_loader)
     images, labels = dataiter.next()
     images = images.squeeze(1)
 
 
-
-
-
-
-
+    # Compute test accuracy and plot the images
     _, predictions, labels = test_accuracy(model, data_set=data, data_loader=data_loader)
 
-    print(predictions)
-    print(labels)
 
     plt.figure(1)
     for i in range(len(labels)):

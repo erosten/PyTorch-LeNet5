@@ -16,6 +16,7 @@ training_set = torchvision.datasets.MNIST('../../data', train=True, download=Tru
 train_loader = torch.utils.data.DataLoader(training_set,
                 batch_size=batch_size_train, shuffle=True, num_workers=8)
 
+
 def imshow(img):
     npimg = img.numpy()
     # pytorch images typically in form (batch_size, input_channels, height, width)

@@ -17,8 +17,7 @@ class LeNet5(torch.nn.Module):
         self.classifier = torch.nn.Sequential(
             torch.nn.Linear(in_features=120, out_features=84),
             torch.nn.ReLU(),
-            torch.nn.Linear(in_features=84, out_features=num_classes),
-            torch.nn.Softmax(dim=0),
+            torch.nn.Linear(in_features=84, out_features=num_classes)
         )
 
     def forward(self,x):
