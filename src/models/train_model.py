@@ -8,7 +8,7 @@ import sys
 import pickle
 
 from utils.experiment_manager import ExperimentManager
-from definitions import EXPERIMENTS_ROOT_DIR
+from utils.definitions import EXPERIMENTS_ROOT_DIR
 
 torch.manual_seed(42)
 

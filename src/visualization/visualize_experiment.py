@@ -3,7 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 import argparse
 from utils.experiment_manager import ExperimentManager
-from definitions import EXPERIMENTS_ROOT_DIR
+from utils.definitions import EXPERIMENTS_ROOT_DIR
 
 def main(experiment_num):
     EM = ExperimentManager()

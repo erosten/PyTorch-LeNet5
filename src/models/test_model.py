@@ -14,7 +14,7 @@ import config
 
 
 from utils.experiment_manager import ExperimentManager
-from definitions import EXPERIMENTS_ROOT_DIR, DATA_DIR
+from utils.definitions import EXPERIMENTS_ROOT_DIR, DATA_DIR
 
 torch.manual_seed(42)
 

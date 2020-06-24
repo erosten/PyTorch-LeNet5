@@ -5,6 +5,8 @@ requires = [
     'six>=1.10.0',
 ]
 
+
+
 if __name__ == "__main__":
     setup(
         name="PyTorch-LeNet5-util",

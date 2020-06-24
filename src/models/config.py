@@ -1,7 +1,7 @@
 import torch
 import torchvision
 import torchvision.transforms as transforms
-from definitions import DATA_DIR
+from utils.definitions import DATA_DIR
 
 # gpu if exists, cpu else
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
