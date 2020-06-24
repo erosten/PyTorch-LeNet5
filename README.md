@@ -125,4 +125,9 @@ This directory contains 3 files
 
 ```
 python visualize_experiment.py -en 4
+
 ```
+
+## Future Plans/TODO
+
+- Add deconvnet visualization
