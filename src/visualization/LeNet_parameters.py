@@ -1,7 +1,6 @@
 
 
 import sys
-sys.path.append('..')
 
 from utils.parameters import conv_output_size
 from utils.parameters import conv_layer_parameters
