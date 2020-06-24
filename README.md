@@ -86,7 +86,7 @@ This directory contains 4 files
 - `config.py`: Contains all the configurations necessary to run `train_model.py` such as the loss function, optimizer, dataset and batch sizes. This is where you should modify training hyperparameters
 - `model.py`: Contains the LeNet5 model implementation
 - `train_model.py`: Contains training code, and stores the data in an ExperimentManager object
-- `test_model.py`: Contains code for testing a trained model on the MNIST dataset as well as my own (and your own) handwritten digits.
+- `test_model.py`: Contains code for testing a trained model on the MNIST dataset as well as my own (create your own) handwritten digits. Creating your own will involve preprocessing the images yourself, as in Lines 65-108, and adjusting the custom image data folder on Line 111
 
 `test_model.py` requires an experiment to load the model from. To use the provided trained model from experiment 6, one can run
 

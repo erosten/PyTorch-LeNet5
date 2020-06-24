@@ -266,7 +266,7 @@ The implementation of LeNet5 differs from the paper in several ways summarized b
 
 \subsection{MNIST Training}
 
-As a baseline, we use cross entropy loss with vanilla stochastic gradient descent of learning rate 1 and train for 30 epochs.
+As a baseline, we use cross entropy loss with vanilla stochastic gradient descent of learning rate 1 and train for 20 epochs.
 
 
 
@@ -277,17 +277,13 @@ As a baseline, we use cross entropy loss with vanilla stochastic gradient descen
 \hline
 Optimizer & Total Epochs & Training Accuracy & Test Accuracy & Experiment \#\\
 \hline
-Vanilla SGD & 30 & 87.04 & 88.23  & 1\\
+Vanilla SGD & 20 & 97.07 & 96.88  & 1\\
 \hline
-SGD w/ Classic Momentum & 30 & 93.43 & 93.78 & 2 \\
+SGD w/ Classic Momentum & 20 & 99.53 & 98.84 & 2 \\
 \hline
-SGD w/ Nesterov Momentum & 30 & 93.99 & 94.49 & 3 \\
+SGD w/ Nesterov Momentum & 20 & 99.6 & 98.99 & 3 \\
 \hline
-Adam & 30 &  97.02 & 97.36 & 4 \\
-\hline
-Adam & 60 & 98.49 & 98.58 & 5\\
-\hline
-Adam & 100 & 99.08 & 98.99 & 6\\
+Adam & 20 &  99.67 & 98.95 & 4 \\
 \hline
 \end{tabular}
 \caption{Training Results with Different Optimizers}
@@ -334,21 +330,6 @@ I test the trained model with my own handwritten digits, and the results are sho
 	
 \end{thebibliography}
 
-\newpage
-\section*{Code}
-
-
-%\lstinputlisting[language=Python]{\oneup/Code/datagen.py}
-%\lstinputlisting[language=Python]{\oneup/Code/generate_higher_dim_data.py}
-%\lstinputlisting[language=Python]{\oneup/Code/generate_sample_data.py}
-%\lstinputlisting[language=Python]{\oneup/Code/generate_higher_dim_data.py}
-%\lstinputlisting[language=Python]{\oneup/Code/generate_sparse_data.py}
-%\lstinputlisting[language=Python]{\oneup/Code/config.py}
-%
-%\lstinputlisting[language=Python]{\oneup/Code/part_1_pca.py}
-%\lstinputlisting[language=Python]{\oneup/Code/part_2_random_projections_compressive_sensing.py}
-%
-%\lstinputlisting[language=Python]{\oneup/Code/part_3_sketching.py}
 
 
 \end{document}
