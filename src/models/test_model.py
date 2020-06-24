@@ -111,7 +111,7 @@ if __name__ == '__main__':
     custom_data_image_folder = os.path.join(DATA_DIR, 'my_data')
 
     data = torchvision.datasets.ImageFolder(root=custom_data_image_folder, transform=transform)
-    data_loader = torch.utils.data.DataLoader(data, batch_size=10, shuffle=False)
+    data_loader = torch.utils.data.DataLoader(data, batch_size=len(data), shuffle=False)
 
 
     # get the images, and reshape them to 28x28
